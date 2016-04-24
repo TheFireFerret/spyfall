@@ -16,27 +16,46 @@ function loadPlayers() {
     var source = $("#player-template").html();
     var template = Handlebars.compile(source);
 
+    var ysource = $("#your-template").html();
+    var ytemplate = Handlebars.compile(ysource);
+
 
     //load players
     ref.child("players/").orderByChild("name").on("child_added", function (snapshot) {
         var json = snapshot.val();
         //console.log(json);
         // console.log(json.name)
-        var key = snapshot.key();
-        json.key = key;
+        json.key = snapshot.key();
         $('#playerList').append(template(json));
     });
 
     //remove players
     ref.child("players/").on("child_removed", function (snapshot) {
-        var json = snapshot.val();
+        //var json = snapshot.val();
         //console.log(json);
         //console.log(snapshot.key());
 
         // console.log(json.name)
         $('#' + snapshot.key()).replaceWith();
     });
+
+    //update players / roles
+    ref.child("players/").orderByChild("name").on("child_changed", function (snapshot) {
+        var json = snapshot.val();
+        var key = snapshot.key();
+        json.key = key;
+        //console.log(json);
+        $('#' + snapshot.key()).replaceWith(template(json));
+
+        //update your own info
+        if (key === playerData.id) {
+            $('#playerInfo').empty().append(ytemplate(json));
+        }
+
+        // console.log(snapshot.key())
+    });
 }
+
 
 function loadLocations() {
     var source = $("#location-template").html();
@@ -83,12 +102,19 @@ function joinGame() {
     ref.child("players/" + playerData.id).onDisconnect().remove();
 
     ref.child("players/").on("child_removed", function (snapshot) {
-        if (!snapshot){
+        if (!snapshot) {
             ref.onDisconnect().remove();
         }
     });
 
     $("#playerInfo").text(name);
+    //var ysource = $("#your-template").html();
+    //var ytemplate = Handlebars.compile(source);
+    //
+    //$('#playerInfo').append(ytemplate(json));
+
+
+
 }
 
 
@@ -108,14 +134,14 @@ function startGame() {
     var rand = 0;
     rules.child("locations/").on("child_added", function (snapshot) {
         //snapshot.forEach(function (loc) {
-            if (snapshot.key() == rand) {
-                currentLocation.id = snapshot.key();
-                currentLocation.name = snapshot.val().name;
-                //console.log(snapshot.val().roles.slice());
-                roles = snapshot.val().roles.slice();
+        if (snapshot.key() == rand) {
+            currentLocation.id = snapshot.key();
+            currentLocation.name = snapshot.val().name;
+            //console.log(snapshot.val().roles.slice());
+            roles = snapshot.val().roles.slice();
 
-                //console.log(snapshot.val());
-            }
+            //console.log(snapshot.val());
+        }
         //});
     });
 
@@ -142,12 +168,12 @@ function startGame() {
     //assign spy
     var spyPlayer = Math.floor(Math.random() * playerCount);
     ref.child("players/" + players[spyPlayer]).update({
-            location: {
-                id: currentLocation.id,
-                locName: currentLocation.name,
-                roleID: 0,
-                role: roles[0]
-            }
+        location: {
+            id: currentLocation.id,
+            locName: "???",
+            roleID: 0,
+            role: roles[0]
+        }
     });
 
     delete players[spyPlayer];
@@ -155,8 +181,8 @@ function startGame() {
     roles = roles.slice(1);
     roles = shuffle(roles);
 
-    var i = 0;
-    players.forEach(function(playerID) {
+    var i = 1;
+    players.forEach(function (playerID) {
         //console.log(playerID);
         ref.child("players/" + playerID).update({
             location: {
@@ -177,7 +203,6 @@ function startGame() {
 
 
 }
-
 
 
 function timer(endTime) {
