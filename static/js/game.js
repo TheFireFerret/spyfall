@@ -200,12 +200,17 @@ function startGame() {
 
 
     //start timer
+    timer();
 
 
 }
 
 
+//# players = timer
 function timer(endTime) {
+    var time = moment().format();
+
+    $('#countdown').text(time);
 
 }
 

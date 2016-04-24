@@ -72,21 +72,25 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Spyfall</a>
+            <a class="navbar-brand" href="/">Spyfall!</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">Rules</a>
+                    <a>{{groupKey}}</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
+<div id="countdown"></div>
+
 
 <button class="btn btn-default" onclick="startGame()">Start Game</button>
+<button class="btn btn-default" onclick="startGame()">New Game</button>
+
 
 <h1>You Are:</h1>
 <div id="playerInfo"></div>
@@ -115,6 +119,12 @@
 
 <!--firebase-->
 <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+
+<!--timer stuff-->
+<script src="/static/js/moment.js"></script>
+<script src="/static/js/countdown.js"></script>
+<script src="/static/js/moment-countdown.js"></script>
+
 
 <!--handlebars-->
 <script src="/static/js/handlebars-v4.0.5.js"></script>
