@@ -143,6 +143,12 @@ function joinGame() {
 //}
 
 function startGame() {
+    $('#gameButton').css('display','none');
+    $('#countdown').css('display','block');
+    $('#countdownLabel').css('display','block');
+
+
+
     var players = [];
     var roles = [];
 
