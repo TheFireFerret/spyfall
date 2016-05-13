@@ -15,11 +15,15 @@ function createGame() {
             roomExists = snapshot.child(id).exists();
         }
     });
-
-
     window.location.replace("/room/" + id);
-
 }
+
+function gotoGame() {
+    var gameID = prompt("Enter the game id!");
+    window.location.replace("/room/" + gameID);
+}
+
+
 
 function rules() {
     var rules = new Firebase("https://spyfallgame.firebaseio.com/rules/");
@@ -158,8 +162,7 @@ function rules() {
                     7: "Diplomat"
                 }
             },
-            10: "Spy",
-            1: {
+            11: {
                 name: "HOSPITAL", roles: {
                     0: "Spy",
                     1: "Nurse",
@@ -279,8 +282,7 @@ function rules() {
                     7: ""
                 }
             },
-            20: "Spy",
-            1: {
+            21: {
                 name: "RESTAURANT", roles: {
                     0: "Spy",
                     1: "",

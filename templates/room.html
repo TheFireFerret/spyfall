@@ -12,6 +12,8 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/main.css" rel="stylesheet">
+
 
     <!-- Custom CSS -->
     <style>
@@ -35,7 +37,7 @@
 
 <script id="location-template" type="text/x-handlebars-template">
 
-    <h5 class="">{{ '{{' }}name{{ '}}' }}</h5>
+    <h4 class="col-xs-6 col-sm-4" id="{{ '{{' }}name{{ '}}' }}" onclick="strikethroughToggle('{{ '{{' }}name{{ '}}' }}')">{{ '{{' }}name{{ '}}' }}</h4>
 
 </script>
 
@@ -80,6 +82,9 @@
                 <li>
                     <a>{{groupKey}}</a>
                 </li>
+                <li>
+                    <a href="http://www.cryptozoic.com/sites/default/files/icme/u30695/spy_rules_eng_0.pdf" target="_blank">Rules</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -88,11 +93,11 @@
 <div id="countdown"></div>
 
 
-<button class="btn btn-default" onclick="startGame()">Start Game</button>
-<button class="btn btn-default" onclick="startGame()">New Game</button>
+<button class="btn btn-default" onclick="startGame()">Start New Game</button>
+<!--<button class="btn btn-default" onclick="newGame()">New Game</button>-->
 
 
-<h1>You Are:</h1>
+<h2>You Are:</h2>
 <div id="playerInfo"></div>
 
 <br>
@@ -103,7 +108,7 @@
 <br>
 
 <h2>Locations:</h2>
-<div id="locationList"></div>
+<div id="locationList" class="row locations"></div>
 
 </body>
 

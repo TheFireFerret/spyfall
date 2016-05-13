@@ -50,9 +50,11 @@ function loadPlayers() {
         //update your own info
         if (key === playerData.id) {
             $('#playerInfo').empty().append(ytemplate(json));
+            if (json.time != '-1') {
+                countDown(json.time);
+                //console.log(json.time);
+            }
         }
-
-        // console.log(snapshot.key())
     });
 }
 
@@ -64,12 +66,24 @@ function loadLocations() {
 
     //load locations
     rules.child("locations/").on("child_added", function (snapshot) {
-        //var json = snapshot.val();
-        //console.log(json);
-        // console.log(json.name)
         $('#locationList').append(template(snapshot.val()));
     });
 }
+
+function strikethroughToggle(string){
+    var ele = document.getElementById(string);
+    var dec = $(ele).css("text-decoration");
+
+    var isStruck = (dec == "line-through");
+
+    if (isStruck) {
+        ele.style.setProperty("text-decoration", "none");
+
+    } else {
+        ele.style.setProperty("text-decoration", "line-through");
+    }
+}
+
 
 function joinGame() {
     var name = prompt("Enter your name");
@@ -91,7 +105,8 @@ function joinGame() {
     //});
 
     playerData.id = ref.child("players/").push({
-        name: name
+        name: name,
+        time: '-1'
     }).key();
 
     playerData.name = name;
@@ -114,9 +129,17 @@ function joinGame() {
     //$('#playerInfo').append(ytemplate(json));
 
 
-
 }
 
+//function clearGame(){
+//    ref.child("players/").orderByChild("name").on("value", function (snapshot) {
+//        snapshot.forEach(function (snap) {
+//            var json = snap.val();
+//            //console.log(json);
+//
+//        });
+//    });
+//}
 
 function startGame() {
     var players = [];
@@ -145,13 +168,6 @@ function startGame() {
         //});
     });
 
-    //ref.child("players/" + playerData.id).update({
-    //    location: {
-    //        id: currentLocation.id,
-    //        locName: currentLocation.name
-    //        //roles: currentLocation.roles
-    //    }
-    //});
 
     //assign jobs
 
@@ -200,22 +216,85 @@ function startGame() {
 
 
     //start timer
-    timer();
+    var now = new Date();
+    var end = new Date(now.getTime() + playerCount * 60000);
+    //console.log(end);
+    //countDown(end);
 
+    storeEndTimes(end);
+}
 
+function newGame() {
+    location.reload();
+}
+
+function storeEndTimes(end) {
+    //set end time
+    ref.child("players/").orderByChild("name").on("value", function (snapshot) {
+        snapshot.forEach(function (snap) {
+            var playerID = snap.key();
+            ref.child("players/" + playerID).update({
+                time: end.toString()
+            });
+        });
+    });
 }
 
 
-//# players = timer
-function timer(endTime) {
-    var time = moment().format();
+function countDown(dt) {
+    if (dt === -1) {
+        return;
+    }
+    var end = new Date(dt);
 
-    $('#countdown').text(time);
+    var _second = 1000;
+    var _minute = _second * 60;
+    var _hour = _minute * 60;
+    //var _day = _hour * 24;
+    var timer;
 
+
+    function showRemaining() {
+        var now = new Date();
+        var distance = end - now;
+
+        if (distance < 0) {
+
+            clearInterval(timer);
+            document.getElementById('countdown').innerHTML = 'Game Over!';
+            endGame();
+
+            return;
+        }
+
+        var minutes = Math.floor((distance % _hour) / _minute);
+        var seconds = Math.floor((distance % _minute) / _second);
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        $('#countdown').text(minutes + ":" + seconds);
+    }
+
+    showRemaining();
+    timer = setInterval(showRemaining, 1000);
 }
+
 
 function endGame() {
+    //storeEndTimes(-1);
 
+    // Announce Spy
+    ref.child("players/").orderByChild("name").on("value", function (snapshot) {
+        snapshot.forEach(function (snap) {
+            var json = snap.val();
+            //console.log(json);
+            if (json.location.roleID === 0) {
+                alert(json.name + " is the spy!");
+                //console.log(json.name);
+                location.reload();
+                return true;
+            }
+        });
+    });
 }
 
 function shuffle(array) {
@@ -235,4 +314,18 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+
+function isSafari() {
+    return navigator.userAgent.toLowerCase().indexOf('safari/') > -1;
+}
+
+function sharePopup(gameID) {
+    if (isSafari()) {
+        alert(window.location);
+    } else {
+        alert("CHROME!!");
+
+    }
 }
