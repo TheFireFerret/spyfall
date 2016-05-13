@@ -20,6 +20,10 @@ function createGame() {
 
 function gotoGame() {
     var gameID = prompt("Enter the game id!");
+    if (!gameID) {
+        alert("Game ID can't be blank!");
+        return;
+    }
     window.location.replace("/room/" + gameID);
 }
 

@@ -1,8 +1,8 @@
-body {
-    margin-left: 5em;
-    margin-right: 5em;
-}
 
 .locations {
     text-align: center;
+}
+
+.outline {
+    outline: 1px solid orange;
 }

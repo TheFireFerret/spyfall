@@ -37,7 +37,7 @@
 
 <script id="location-template" type="text/x-handlebars-template">
 
-    <h4 class="col-xs-6 col-sm-4" id="{{ '{{' }}name{{ '}}' }}" onclick="strikethroughToggle('{{ '{{' }}name{{ '}}' }}')">{{ '{{' }}name{{ '}}' }}</h4>
+    <h4 class="col-xs-6 col-md-4 text-xs-center" id="{{ '{{' }}name{{ '}}' }}" onclick="strikethroughToggle('{{ '{{' }}name{{ '}}' }}')">{{ '{{' }}name{{ '}}' }}</h4>
 
 </script>
 
@@ -89,13 +89,14 @@
         </div>
     </div>
 </nav>
-
-<div id="countdown"></div>
-
-
+<div>
+<div class="col-xs-1"></div>
+<div class="col-xs-10">
 <button class="btn btn-default" onclick="startGame()">Start New Game</button>
 <!--<button class="btn btn-default" onclick="newGame()">New Game</button>-->
-
+<br>
+<div id="countdown"></div>
+<br>
 
 <h2>You Are:</h2>
 <div id="playerInfo"></div>
@@ -108,8 +109,11 @@
 <br>
 
 <h2>Locations:</h2>
-<div id="locationList" class="row locations"></div>
+    <div class="col-xs-1"></div>
+</div>
 
+    <div id="locationList" class="row locations"></div>
+</div>
 </body>
 
 

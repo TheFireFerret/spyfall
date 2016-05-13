@@ -88,7 +88,8 @@ function strikethroughToggle(string){
 function joinGame() {
     var name = prompt("Enter your name");
     if (!name) {
-        return;
+        alert("Your name can't be blank!");
+        window.location.replace("/");
     }
 
     //TODO say no if the game is full
