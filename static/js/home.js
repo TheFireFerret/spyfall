@@ -19,14 +19,18 @@ function createGame() {
 }
 
 function gotoGame() {
-    var gameID = prompt("Enter the game id!");
-    if (!gameID) {
-        alert("Game ID can't be blank!");
-        return;
-    }
-    window.location.replace("/room/" + gameID);
+    var ref = new Firebase("https://spyfallgame.firebaseio.com/rooms/");
+    ref.once("value", function (snapshot) {
+        var gameID = prompt("Enter the game id:");
+        if (!gameID) {
+            alert("Game ID can't be blank!");
+        } else if (!snapshot.child(gameID).exists()) {
+            alert("Invalid room ID");
+        } else {
+            window.location.replace("/room/" + gameID);
+        }
+    });
 }
-
 
 
 function rules() {
